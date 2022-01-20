@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./AudioPlayer.module.css";
 import Waveform from "./Waveform";
+import secondsToTime from "../helpers/time";
 
 function AudioPlayer({ track }) {
+  const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const audioRef = useRef(null);
   const [waveformData, setWaveformData] = useState();
+  const [waveformDataFetching, setWaveformDataFetching] = useState(true);
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -14,6 +16,7 @@ function AudioPlayer({ track }) {
 
   useEffect(() => {
     const getWaveformData = async (url) => {
+      setWaveformDataFetching(true);
       const proxy = "https://cors-anywhere.herokuapp.com/";
       await fetch(proxy + url, {
         method: "get",
@@ -24,7 +27,10 @@ function AudioPlayer({ track }) {
         },
       })
         .then((response) => response.json())
-        .then((data) => setWaveformData(data))
+        .then((data) => {
+          setWaveformData(data);
+          setWaveformDataFetching(false);
+        })
         .catch((e) => console.log(e));
     };
 
@@ -75,6 +81,8 @@ function AudioPlayer({ track }) {
     audioRef.current.currentTime = 0;
   }, [track]);
 
+  console.log(audioRef);
+
   return (
     <>
       <audio src={track.audio} ref={audioRef} />
@@ -110,6 +118,11 @@ function AudioPlayer({ track }) {
             </svg>
           )}
         </button>
+        <img
+          className={styles.trackCoverArt}
+          src={track.cover_art}
+          alt={track.title}
+        />
         <div className={styles.trackInfo}>
           <div className={styles.trackTitle}>{track.title}</div>
           <div className={styles.trackArtist}>
@@ -117,7 +130,7 @@ function AudioPlayer({ track }) {
           </div>
         </div>
         <div className={styles.sliderContainer}>
-          {waveformData && (
+          {!waveformDataFetching && waveformData && (
             <Waveform
               progress={progress}
               waveformData={waveformData}
@@ -126,6 +139,18 @@ function AudioPlayer({ track }) {
               trackPlaying={isPlaying}
             />
           )}
+        </div>
+        <div className={styles.timeContainer}>
+          {audioRef &&
+            audioRef.current &&
+            audioRef.current.currentTime >= 0 &&
+            audioRef.current.duration >= 0 && (
+              <>
+                {secondsToTime(audioRef.current.currentTime)}
+                <br />
+                {secondsToTime(audioRef.current.duration)}
+              </>
+            )}
         </div>
       </div>
     </>

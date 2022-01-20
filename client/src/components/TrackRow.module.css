@@ -1,12 +1,22 @@
 .trackRow {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 5rem;
   border-bottom: 1px solid #333;
 }
 
+.trackInfoContainer {
+  display: flex;
+  align-items: center;
+}
+
 .trackRow:last-child {
   border-bottom: none;
+}
+
+.trackDuration {
+  float: right;
 }
 
 .trackPlay {
@@ -26,4 +36,10 @@
 
 .trackArtist {
   color: #767676;
+}
+
+.trackCoverArt {
+  height: 50px;
+  width: 50px;
+  margin: 20px;
 }
