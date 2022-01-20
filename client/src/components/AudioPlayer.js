@@ -1,35 +1,68 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./AudioPlayer.module.css";
+import Waveform from "./Waveform";
 
 function AudioPlayer({ track }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const audioRef = useRef(null);
+  const [waveformData, setWaveformData] = useState();
 
   const handlePlay = () => {
     setIsPlaying(true);
   };
+
+  useEffect(() => {
+    const getWaveformData = async (url) => {
+      const proxy = "https://cors-anywhere.herokuapp.com/";
+      await fetch(proxy + url, {
+        method: "get",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setWaveformData(data))
+        .catch((e) => console.log(e));
+    };
+
+    if (track) {
+      getWaveformData(track.waveform);
+    }
+  }, [track]);
 
   const handlePause = () => {
     setIsPlaying(false);
   };
 
   const handleTimeUpdate = (e) => {
-    setProgress(e.target.currentTime / e.target.duration);
-  };
-
-  const handleSliderChange = (e) => {
-    audioRef.current.currentTime =
-      (e.target.value / 1000) * audioRef.current.duration;
+    setProgress((e.target.currentTime / e.target.duration) * 100);
   };
 
   const handleTogglePlaybackClick = () => {
-    if (audioRef.current.paused) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
-    }
+    return audioRef.current.paused
+      ? audioRef.current.play()
+      : audioRef.current.pause();
   };
+
+  const handleSliderChange = (calculatedTime) => {
+    audioRef.current.currentTime = calculatedTime;
+    audioRef.current.paused && audioRef.current.play();
+  };
+
+  useEffect(() => {
+    const handleSpaceKey = (e) => {
+      if (e.code === "Space") {
+        handleTogglePlaybackClick();
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleSpaceKey);
+    return () => window.removeEventListener("keydown", handleSpaceKey);
+  }, []);
 
   useEffect(() => {
     audioRef.current.addEventListener("play", handlePlay);
@@ -84,14 +117,15 @@ function AudioPlayer({ track }) {
           </div>
         </div>
         <div className={styles.sliderContainer}>
-          <input
-            type="range"
-            min="1"
-            max="1000"
-            value={progress * 1000}
-            className={styles.slider}
-            onChange={handleSliderChange}
-          />
+          {waveformData && (
+            <Waveform
+              progress={progress}
+              waveformData={waveformData}
+              trackDuration={track.length * 1000}
+              handleSliderChange={handleSliderChange}
+              trackPlaying={isPlaying}
+            />
+          )}
         </div>
       </div>
     </>
