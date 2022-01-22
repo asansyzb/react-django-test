@@ -12,7 +12,7 @@ class TrackViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @action(detail=False, methods=["GET"], name="Get Waveform")
-    def get_waveform(self, request, *args, **kwargs):
+    def waveform(self, request, *args, **kwargs):
         url = request.GET.get('url', '')
         req = requests.get(url)
         result = json.loads(req.content.decode())

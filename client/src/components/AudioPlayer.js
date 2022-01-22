@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./AudioPlayer.module.css";
 import Waveform from "./Waveform";
-import secondsToTime from "../helpers/time";
+import Timeline from "./Timeline";
 
 function AudioPlayer({ track }) {
   const audioRef = useRef(null);
@@ -17,8 +17,8 @@ function AudioPlayer({ track }) {
   useEffect(() => {
     const getWaveformData = async (url) => {
       setWaveformDataFetching(true);
-      const proxy = "http://localhost:8000/api/tracks/get_waveform?url="
-      await fetch(proxy + url, {
+      const proxy = `http://localhost:8000/api/tracks/waveform?url=${url}`;
+      await fetch(proxy, {
         method: "get",
         headers: {
           "Content-Type": "application/json",
@@ -79,8 +79,6 @@ function AudioPlayer({ track }) {
     audioRef.current.currentTime = 0;
   }, [track]);
 
-  console.log(audioRef);
-
   return (
     <>
       <audio src={track.audio} ref={audioRef} />
@@ -138,18 +136,7 @@ function AudioPlayer({ track }) {
             />
           )}
         </div>
-        <div className={styles.timeContainer}>
-          {audioRef &&
-            audioRef.current &&
-            audioRef.current.currentTime >= 0 &&
-            audioRef.current.duration >= 0 && (
-              <>
-                {secondsToTime(audioRef.current.currentTime)}
-                <br />
-                {secondsToTime(audioRef.current.duration)}
-              </>
-            )}
-        </div>
+        <Timeline audioRef={audioRef} />
       </div>
     </>
   );
