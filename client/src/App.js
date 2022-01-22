@@ -10,7 +10,7 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState();
 
   useEffect(() => {
-    fetch("http://localhost:8000/tracks")
+    fetch("http://localhost:8000/api/tracks")
       .then((res) => res.json())
       .then((data) => setTracks(data));
   }, []);

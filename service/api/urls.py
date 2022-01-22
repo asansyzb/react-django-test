@@ -7,5 +7,5 @@ router = routers.DefaultRouter()
 router.register(r"tracks", views.TrackViewSet)
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path("api/", include(router.urls)),
 ]

@@ -17,13 +17,11 @@ function AudioPlayer({ track }) {
   useEffect(() => {
     const getWaveformData = async (url) => {
       setWaveformDataFetching(true);
-      const proxy = "https://cors-anywhere.herokuapp.com/";
+      const proxy = "http://localhost:8000/api/tracks/get_waveform?url="
       await fetch(proxy + url, {
         method: "get",
-        mode: "cors",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       })
         .then((response) => response.json())
