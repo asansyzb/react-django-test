@@ -25,3 +25,19 @@ class TrackSerializer(serializers.ModelSerializer):
             "waveform",
             "spotify",
         ]
+
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    tracks = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field="id"
+    )
+
+    class Meta:
+        model = models.Playlist
+        fields = [
+            "id",
+            "title",
+            "tracks"
+        ]

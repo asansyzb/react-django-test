@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { paintCanvas } from "../helpers/canvas";
-import waveformAvgChunker from "../helpers/waveform";
+import { paintCanvas } from "../../helpers/canvas";
+import waveformAvgChunker from "../../helpers/waveform";
 import styles from "./Waveform.module.css";
 
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max);

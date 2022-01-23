@@ -1,30 +1,21 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import styles from "./AudioPlayer.module.css";
 import Waveform from "./Waveform";
 import Timeline from "./Timeline";
+import Context from "../../store/context";
+import { fetchWaveform } from "../../store/services";
 
 function AudioPlayer({ track }) {
   const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { isPlaying, setIsPlaying } = useContext(Context);
   const [progress, setProgress] = useState(0);
   const [waveformData, setWaveformData] = useState();
   const [waveformDataFetching, setWaveformDataFetching] = useState(true);
 
-  const handlePlay = () => {
-    setIsPlaying(true);
-  };
-
   useEffect(() => {
     const getWaveformData = async (url) => {
       setWaveformDataFetching(true);
-      const proxy = `http://localhost:8000/api/tracks/waveform?url=${url}`;
-      await fetch(proxy, {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
+      fetchWaveform(url)
         .then((data) => {
           setWaveformData(data);
           setWaveformDataFetching(false);
@@ -36,10 +27,6 @@ function AudioPlayer({ track }) {
       getWaveformData(track.waveform);
     }
   }, [track]);
-
-  const handlePause = () => {
-    setIsPlaying(false);
-  };
 
   const handleTimeUpdate = (e) => {
     setProgress((e.target.currentTime / e.target.duration) * 100);
@@ -69,10 +56,26 @@ function AudioPlayer({ track }) {
   }, []);
 
   useEffect(() => {
+    if (!isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
+
+    const handlePlay = () => {
+      setIsPlaying(true);
+    };
+
     audioRef.current.addEventListener("play", handlePlay);
     audioRef.current.addEventListener("pause", handlePause);
     audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
-  }, []);
+  }, [setIsPlaying]);
 
   useEffect(() => {
     audioRef.current.play();

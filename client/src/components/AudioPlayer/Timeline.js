@@ -1,5 +1,5 @@
 import React from "react";
-import secondsToTime from "../helpers/time";
+import secondsToTime from "../../helpers/time";
 import styles from "./Timeline.module.css";
 
 const Timeline = ({ audioRef }) => {

@@ -17,3 +17,8 @@ class TrackViewSet(viewsets.ModelViewSet):
         req = requests.get(url)
         result = json.loads(req.content.decode())
         return Response(result)
+
+class PlaylistViewSet(viewsets.ModelViewSet):
+    queryset = models.Playlist.objects.all()
+    serializer_class = serializers.PlaylistSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
