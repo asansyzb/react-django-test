@@ -25,6 +25,12 @@
   width: 12.5rem;
 }
 
+.trackCoverArt {
+  height: 50px;
+  width: 50px;
+  margin: 20px;
+}
+
 .trackTitle {
   font-weight: 600;
 }
@@ -35,7 +41,6 @@
 
 .sliderContainer {
   flex-grow: 1;
-  margin-right: 1.5rem;
 }
 
 .slider {

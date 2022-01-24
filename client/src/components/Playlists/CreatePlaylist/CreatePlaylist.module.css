@@ -1,4 +1,4 @@
-.trackRow {
+.playlistRow {
   display: flex;
   align-items: center;
   height: 5rem;
@@ -9,21 +9,23 @@
   border-bottom: none;
 }
 
-.trackPlay {
+.addPlaylist {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
   background: #333;
   box-shadow: 0;
   border: 0;
-  margin-right: 1rem;
   padding: 0;
+  margin: 20px;
 }
 
-.trackTitle {
+.playlistTitle {
   font-weight: 600;
 }
 
-.trackArtist {
-  color: #767676;
+.playlistCoverArt {
+  height: 50px;
+  width: 50px;
+  margin: 20px;
 }

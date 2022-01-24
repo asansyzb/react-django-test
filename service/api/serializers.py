@@ -25,3 +25,18 @@ class TrackSerializer(serializers.ModelSerializer):
             "waveform",
             "spotify",
         ]
+
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    tracks = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=models.Track.objects.all(),
+    )
+
+    class Meta:
+        model = models.Playlist
+        fields = [
+            "id",
+            "title",
+            "tracks"
+        ]
