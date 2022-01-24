@@ -1,8 +1,26 @@
-.playlistRow {
+.playlistRowContainer {
   display: flex;
   align-items: center;
   height: 5rem;
   border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+.playlistRow {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1.5;
+  align-items: inherit;
+}
+
+.trashIcon {
+  width: 40px;
+  height: auto;
+}
+
+.trashIconButton {
+  border-radius: 50%;
+  border: none;
 }
 
 .trackRow:last-child {

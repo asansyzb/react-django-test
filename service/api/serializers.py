@@ -28,10 +28,9 @@ class TrackSerializer(serializers.ModelSerializer):
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
-    tracks = serializers.SlugRelatedField(
+    tracks = serializers.PrimaryKeyRelatedField(
         many=True,
-        read_only=True,
-        slug_field="id"
+        queryset=models.Track.objects.all(),
     )
 
     class Meta:

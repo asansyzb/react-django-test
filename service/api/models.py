@@ -1,6 +1,7 @@
 from pyexpat import model
 from django.conf import settings
 from django.db import models
+import uuid
 
 
 class Artist(models.Model):
@@ -50,6 +51,8 @@ class Track(models.Model):
     def spotify(self):
         return "{}{}/{}".format(settings.DSP_BASE, self.id, "spotify")
 
+
 class Playlist(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100, null=False)
     tracks = models.ManyToManyField(Track)

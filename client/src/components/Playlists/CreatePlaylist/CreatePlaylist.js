@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./CreatePlaylist.module.css";
+import { createPlaylist } from "../../../store/services";
+import { Context } from "../../../store/context";
 
 const CreatePlaylist = () => {
   const [createPressed, setCreatePressed] = useState();
   const [playlistTitle, setPlaylistTitle] = useState("");
+
+  const { playlists, setPlaylists } = useContext(Context);
 
   const handleCreate = () => {
     setCreatePressed(!createPressed);
@@ -14,19 +18,14 @@ const CreatePlaylist = () => {
   };
 
   const handleOnSubmit = (e) => {
-    fetch("http://localhost:8000/api/playlists/", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: playlistTitle,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => setPlaylistTitle(""))
+    createPlaylist(playlistTitle)
+      .then((result) => {
+        setPlaylists([...playlists, result]);
+      })
       .catch((e) => console.log);
+
     setCreatePressed(false);
+    setPlaylistTitle("");
     e.preventDefault();
   };
 
@@ -34,7 +33,7 @@ const CreatePlaylist = () => {
     <div className={styles.playlistRow}>
       <button className={styles.addPlaylist} onClick={handleCreate}>
         <svg
-          enable-background="new 0 0 50 50"
+          enableBackground="new 0 0 50 50"
           height="50"
           id="Layer_1"
           version="1.1"
@@ -46,7 +45,7 @@ const CreatePlaylist = () => {
           <line
             fill="none"
             stroke="#fff"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             strokeWidth="2"
             x1="8"
             x2="40"
@@ -56,7 +55,7 @@ const CreatePlaylist = () => {
           <line
             fill="none"
             stroke="#fff"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             strokeWidth="2"
             x1="24"
             x2="24"

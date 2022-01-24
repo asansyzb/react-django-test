@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import styles from "./AudioPlayer.module.css";
 import Waveform from "./Waveform";
 import Timeline from "./Timeline";
-import Context from "../../store/context";
+import { Context } from "../../store/context";
 import { fetchWaveform } from "../../store/services";
 
 function AudioPlayer({ track }) {
@@ -72,9 +72,11 @@ function AudioPlayer({ track }) {
       setIsPlaying(true);
     };
 
-    audioRef.current.addEventListener("play", handlePlay);
-    audioRef.current.addEventListener("pause", handlePause);
-    audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+    if (audioRef && audioRef.current) {
+      audioRef.current.addEventListener("play", handlePlay);
+      audioRef.current.addEventListener("pause", handlePause);
+      audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+    }
   }, [setIsPlaying]);
 
   useEffect(() => {

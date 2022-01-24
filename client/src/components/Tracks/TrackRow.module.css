@@ -15,8 +15,11 @@
   border-bottom: none;
 }
 
-.trackDuration {
+.trackRightContainer {
   float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .trackPlay {
@@ -41,5 +44,16 @@
 .trackCoverArt {
   height: 50px;
   width: 50px;
+  margin: 20px;
+}
+
+.trashIcon {
+  width: 40px;
+  height: auto;
+}
+
+.trashIconButton {
+  border-radius: 50%;
+  border: none;
   margin: 20px;
 }
